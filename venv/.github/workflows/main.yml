@@ -1,4 +1,4 @@
-name: ML CI Pipeline
+name: ML Docker CI Pipeline
 
 on:
   push:
@@ -20,5 +20,11 @@ jobs:
     - name: Install dependencies
       run: pip install -r requirements.txt
 
-    - name: Run test
-      run: echo "CI Pipeline working successfully"
+    - name: Build Docker image
+      run: docker build -t mlops-api .
+
+    - name: Run Docker container
+      run: docker run -d -p 8000:8000 mlops-api
+
+    - name: Test API endpoint
+      run: curl http://localhost:8000/docs
